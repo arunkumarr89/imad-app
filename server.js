@@ -14,6 +14,7 @@ var content={
         <p>This is a sample article. This is a sample article. This is a sample article. This is a sample article.</p>`
 };
 
+function createTemplate(data){
 var htmlTemplate=` <html>
     <head>
         <title>${title}</title>
@@ -30,6 +31,7 @@ var htmlTemplate=` <html>
     </body>
     </html>
 `;
+}
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
