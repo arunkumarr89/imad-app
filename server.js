@@ -2,8 +2,19 @@ var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
 
+//Importing the PostGres Pool 
+var Pool = require('pg').Pool;
+
 var app = express();
 app.use(morgan('combined'));
+//Declaring the DB Configuration
+var config={
+  user: 'arunkumarrit',
+  database : 'arunkumarrit',
+  host : 'http://db.imad.hasura-app.io',
+  port : '5432',
+  password: process.env.DB_PASSWORD
+};
 
 var articles={
 'article-one':{
@@ -56,6 +67,25 @@ function createTemplate(data){
     `;
     return htmlTemplate;
 }
+
+var pool = new Pool(config);
+
+app.get('/test-db', function (req,res){
+    //make a select statement
+    pool.query('SELECT * FROM TEST',function(err,result){
+        //return the response    
+        if(err)
+        {
+            res.status(500).send(err.toString());
+        }
+        else
+        {
+            res.send(JSON.stringify(result))
+        }
+    });
+    
+});
+
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
